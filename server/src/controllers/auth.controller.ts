@@ -71,19 +71,28 @@ export const loginController = asyncHandler(
 );
 
 export const logOutController = asyncHandler(
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
+    // First logout (requires active session)
     req.logout((err) => {
       if (err) {
         console.error("Logout error:", err);
-        return res
-          .status(HTTPSTATUS.INTERNAL_SERVER_ERROR)
-          .json({ error: "Failed to log out" });
+        return next(err);
       }
+      
+      // Then destroy the session
+      req.session?.destroy((err) => {
+        if (err) {
+          console.error("Session destroy error:", err);
+          return next(err);
+        }
+        
+        // Clear the cookie
+        res.clearCookie('sessionId');
+        
+        return res
+          .status(HTTPSTATUS.OK)
+          .json({ message: "Logged out successfully" });
+      });
     });
-
-    req.session = null;
-    return res
-      .status(HTTPSTATUS.OK)
-      .json({ message: "Logged out successfully" });
   }
 );
