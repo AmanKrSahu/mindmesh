@@ -17,6 +17,7 @@ import workspaceRoutes from "./routes/workspace.route";
 import { asyncHandler } from "./middlewares/asyncHandler.middleware";
 import { errorHandler } from "./middlewares/errorHandler.middleware";
 import isAuthenticated from "./middlewares/isAuthenticated.middleware";
+import projectRoutes from "./routes/project.route";
 
 const app = express();
 const BASE_PATH = config.BASE_PATH;
@@ -48,7 +49,7 @@ app.use(
 
 app.get(
   `/`,
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  asyncHandler(async (_req: Request, _res: Response, _next: NextFunction) => {
     throw new BadRequestException(
       "This is a bad request",
       ErrorCodeEnum.AUTH_INVALID_TOKEN
@@ -60,6 +61,7 @@ app.use(`${BASE_PATH}/auth`, authRoutes);
 app.use(`${BASE_PATH}/user`, isAuthenticated, userRoutes);
 app.use(`${BASE_PATH}/workspace`, isAuthenticated, workspaceRoutes);
 app.use(`${BASE_PATH}/member`, isAuthenticated, memberRoutes);
+app.use(`${BASE_PATH}/project`, isAuthenticated, projectRoutes);
 
 app.use(errorHandler);
 
