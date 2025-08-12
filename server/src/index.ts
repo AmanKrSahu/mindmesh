@@ -3,6 +3,7 @@ import cors from "cors";
 import session from "cookie-session";
 import { config } from "./config/app.config";
 import { BadRequestException } from "./utils/appError";
+import connectDatabase from "./config/database.config";
 import { ErrorCodeEnum } from "./enums/error-code.enum";
 import express, { NextFunction, Request, Response } from "express";
 import { asyncHandler } from "./middlewares/asyncHandler.middleware";
@@ -47,4 +48,5 @@ app.use(errorHandler);
 
 app.listen(config.PORT, async () => {
   console.log(`Server listening on port ${config.PORT} in ${config.NODE_ENV}`);
+  await connectDatabase();
 });
