@@ -6,6 +6,11 @@ import { BadRequestException } from "./utils/appError";
 import connectDatabase from "./config/database.config";
 import { ErrorCodeEnum } from "./enums/error-code.enum";
 import express, { NextFunction, Request, Response } from "express";
+
+import passport from "passport";
+import "./config/passport.config";
+
+import authRoutes from "./routes/auth.route";
 import { asyncHandler } from "./middlewares/asyncHandler.middleware";
 import { errorHandler } from "./middlewares/errorHandler.middleware";
 
@@ -27,6 +32,9 @@ app.use(
   })
 );
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(
   cors({
     origin: config.FRONTEND_ORIGIN,
@@ -43,6 +51,8 @@ app.get(
     );
   })
 );
+
+app.use(`${BASE_PATH}/auth`, authRoutes);
 
 app.use(errorHandler);
 
