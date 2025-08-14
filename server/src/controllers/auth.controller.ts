@@ -5,19 +5,28 @@ import { registerSchema } from "../validation/auth.validation";
 import { HTTPSTATUS } from "../config/http.config";
 import { registerUserService } from "../services/auth.service";
 import passport from "passport";
+import { signJwtToken } from "../utils/jwt";
 
 export const googleLoginCallback = asyncHandler(
   async (req: Request, res: Response) => {
+    const jwt = req.jwt;
     const currentWorkspace = req.user?.currentWorkspace;
 
-    if (!currentWorkspace) {
+    if (!jwt) {
       return res.redirect(
         `${config.FRONTEND_GOOGLE_CALLBACK_URL}?status=failure`
       );
     }
 
+    res.cookie("access_token", jwt, {
+      httpOnly: true,
+      secure: config.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
     return res.redirect(
-      `${config.FRONTEND_ORIGIN}/workspace/${currentWorkspace}`
+      `${config.FRONTEND_GOOGLE_CALLBACK_URL}?status=success&access_token=${jwt}&current_workspace=${currentWorkspace}`
     );
   }
 );
@@ -55,15 +64,19 @@ export const loginController = asyncHandler(
           });
         }
 
-        req.logIn(user, (err) => {
-          if (err) {
-            return next(err);
-          }
+        const access_token = signJwtToken({ userId: user._id });
 
-          return res.status(HTTPSTATUS.OK).json({
-            message: "Logged in successfully",
-            user,
-          });
+        res.cookie("access_token", access_token, {
+          httpOnly: true,
+          secure: config.NODE_ENV === "production",
+          sameSite: "lax",
+          maxAge: 24 * 60 * 60 * 1000,
+        });
+
+        return res.status(HTTPSTATUS.OK).json({
+          message: "Logged in successfully",
+          access_token,
+          user,
         });
       }
     )(req, res, next);
@@ -71,28 +84,8 @@ export const loginController = asyncHandler(
 );
 
 export const logOutController = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    // First logout (requires active session)
-    req.logout((err) => {
-      if (err) {
-        console.error("Logout error:", err);
-        return next(err);
-      }
-      
-      // Then destroy the session
-      req.session?.destroy((err) => {
-        if (err) {
-          console.error("Session destroy error:", err);
-          return next(err);
-        }
-        
-        // Clear the cookie
-        res.clearCookie('sessionId');
-        
-        return res
-          .status(HTTPSTATUS.OK)
-          .json({ message: "Logged out successfully" });
-      });
-    });
+  async (req: Request, res: Response, _next: NextFunction) => {
+    res.clearCookie("access_token");
+    return res.status(HTTPSTATUS.OK).json({ message: "Logged out successfully" });
   }
 );
