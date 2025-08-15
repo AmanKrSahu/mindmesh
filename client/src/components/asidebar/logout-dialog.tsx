@@ -10,10 +10,10 @@ import { Button } from "@/components/ui/button";
 import { useCallback } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { logoutMutationFn } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "lucide-react";
 import { useStore } from "@/store/store";
+import { toast } from "sonner";
 
 const LogoutDialog = (props: {
   isOpen: boolean;
@@ -36,10 +36,8 @@ const LogoutDialog = (props: {
       setIsOpen(false);
     },
     onError: (error) => {
-      toast({
-        title: "Error",
+      toast("Error", {
         description: error.message,
-        variant: "destructive",
       });
     },
   });

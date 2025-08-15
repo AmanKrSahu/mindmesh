@@ -40,7 +40,7 @@ import useGetWorkspaceMembers from "@/hooks/api/use-get-workspace-members";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { createTaskMutationFn } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 export default function CreateTaskForm(props: {
   projectId?: string;
@@ -109,21 +109,19 @@ export default function CreateTaskForm(props: {
     status: z.enum(
       Object.values(TaskStatusEnum) as [keyof typeof TaskStatusEnum],
       {
-        required_error: "Status is required",
+        message: "Status is required",
       }
     ),
     priority: z.enum(
       Object.values(TaskPriorityEnum) as [keyof typeof TaskPriorityEnum],
       {
-        required_error: "Priority is required",
+        message: "Priority is required",
       }
     ),
     assignedTo: z.string().trim().min(1, {
       message: "AssignedTo is required",
     }),
-    dueDate: z.date({
-      required_error: "A date of birth is required.",
-    }),
+    dueDate: z.date(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -162,18 +160,14 @@ export default function CreateTaskForm(props: {
           queryKey: ["all-tasks", workspaceId],
         });
 
-        toast({
-          title: "Success",
+        toast("Success", {
           description: "Task created successfully",
-          variant: "success",
         });
         onClose();
       },
       onError: (error) => {
-        toast({
-          title: "Error",
+        toast("Error", {
           description: error.message,
-          variant: "destructive",
         });
       },
     });

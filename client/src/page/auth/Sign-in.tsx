@@ -23,9 +23,9 @@ import Logo from "@/components/logo";
 import GoogleOauthButton from "@/components/auth/google-oauth-button";
 import { useMutation } from "@tanstack/react-query";
 import { loginMutationFn } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
 import { Loader } from "lucide-react";
 import { useStore } from "@/store/store";
+import { toast } from "sonner";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -68,10 +68,8 @@ const SignIn = () => {
         navigate(decodedUrl || `/workspace/${user.currentWorkspace}`);
       },
       onError: (error) => {
-        toast({
-          title: "Error",
+        toast("Error", {
           description: error.message,
-          variant: "destructive",
         });
       },
     });

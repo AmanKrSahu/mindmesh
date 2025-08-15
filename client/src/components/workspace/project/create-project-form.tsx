@@ -23,8 +23,8 @@ import { useNavigate } from "react-router-dom";
 import useWorkspaceId from "@/hooks/use-workspace-id";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createProjectMutationFn } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
 import { Loader } from "lucide-react";
+import { toast } from "sonner";
 
 export default function CreateProjectForm({
   onClose,
@@ -76,20 +76,16 @@ export default function CreateProjectForm({
           queryKey: ["allprojects", workspaceId],
         });
 
-        toast({
-          title: "Success",
+        toast("Success", {
           description: "Project created successfully",
-          variant: "success",
         });
 
         navigate(`/workspace/${workspaceId}/project/${project._id}`);
         setTimeout(() => onClose(), 500);
       },
       onError: (error) => {
-        toast({
-          title: "Error",
+        toast("Error", {
           description: error.message,
-          variant: "destructive",
         });
       },
     });

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Row } from "@tanstack/react-table";
+import { type Row } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -12,11 +12,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ConfirmDialog } from "@/components/resuable/confirm-dialog";
-import { TaskType } from "@/types/api.type";
+import { type TaskType } from "@/types/api.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useWorkspaceId from "@/hooks/use-workspace-id";
 import { deleteTaskMutationFn } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 interface DataTableRowActionsProps {
   row: Row<TaskType>;
@@ -45,18 +45,14 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
           queryClient.invalidateQueries({
             queryKey: ["all-tasks", workspaceId],
           });
-          toast({
-            title: "Success",
+          toast("Success", {
             description: data.message,
-            variant: "success",
           });
           setTimeout(() => setOpenDialog(false), 100);
         },
         onError: (error) => {
-          toast({
-            title: "Error",
+          toast("Error", {
             description: error.message,
-            variant: "destructive",
           });
         },
       }

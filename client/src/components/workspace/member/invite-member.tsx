@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuthContext } from "@/context/auth-provider";
-import { toast } from "@/hooks/use-toast";
 import { CheckIcon, CopyIcon, Loader } from "lucide-react";
 import { BASE_ROUTE } from "@/routes/common/routePaths";
 import PermissionsGuard from "@/components/resuable/permission-guard";
 import { Permissions } from "@/constant";
+import { toast } from "sonner";
 
 const InviteMember = () => {
   const { workspace, workspaceLoading } = useAuthContext();
@@ -24,10 +24,8 @@ const InviteMember = () => {
     if (inviteUrl) {
       navigator.clipboard.writeText(inviteUrl).then(() => {
         setCopied(true);
-        toast({
-          title: "Copied",
+        toast("Copied", {
           description: "Invite url copied to clipboard",
-          variant: "success",
         });
         setTimeout(() => setCopied(false), 2000);
       });

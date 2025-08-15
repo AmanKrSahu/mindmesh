@@ -16,8 +16,8 @@ import { Textarea } from "../ui/textarea";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createWorkspaceMutationFn } from "@/lib/api";
 import { useNavigate } from "react-router-dom";
-import { toast } from "@/hooks/use-toast";
 import { Loader } from "lucide-react";
+import { toast } from "sonner";
 
 export default function CreateWorkspaceForm({
   onClose,
@@ -60,10 +60,8 @@ export default function CreateWorkspaceForm({
         navigate(`/workspace/${workspace._id}`);
       },
       onError: (error) => {
-        toast({
-          title: "Error",
+        toast("Error", {
           description: error.message,
-          variant: "destructive",
         });
       },
     });
