@@ -23,8 +23,8 @@ import { type ProjectType } from "@/types/api.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useWorkspaceId from "@/hooks/use-workspace-id";
 import { editProjectMutationFn } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
 import { Loader } from "lucide-react";
+import { toast } from "sonner";
 
 export default function EditProjectForm(props: {
   project?: ProjectType;
@@ -86,19 +86,15 @@ export default function EditProjectForm(props: {
           queryKey: ["allprojects", workspaceId],
         });
 
-        toast({
-          title: "Success",
+        toast("Success", {
           description: data.message,
-          variant: "success",
         });
 
         setTimeout(() => onClose(), 100);
       },
       onError: (error) => {
-        toast({
-          title: "Error",
+        toast("Error", {
           description: error.message,
-          variant: "destructive",
         });
       },
     });

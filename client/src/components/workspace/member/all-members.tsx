@@ -22,8 +22,8 @@ import useWorkspaceId from "@/hooks/use-workspace-id";
 import useGetWorkspaceMembers from "@/hooks/api/use-get-workspace-members";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { changeWorkspaceMemberRoleMutationFn } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
 import { Permissions } from "@/constant";
+import { toast } from "sonner";
 const AllMembers = () => {
   const { user, hasPermission } = useAuthContext();
 
@@ -54,17 +54,13 @@ const AllMembers = () => {
         queryClient.invalidateQueries({
           queryKey: ["members", workspaceId],
         });
-        toast({
-          title: "Success",
+        toast("Success", {
           description: "Member's role changed successfully",
-          variant: "success",
         });
       },
       onError: (error) => {
-        toast({
-          title: "Error",
+        toast("Error", {
           description: error.message,
-          variant: "destructive",
         });
       },
     });

@@ -1,6 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { TaskPriorityEnum, TaskStatusEnum } from "@/constant";
 import useWorkspaceId from "@/hooks/use-workspace-id";
 import { getAllTasksQueryFn } from "@/lib/api";
 import {
@@ -8,7 +7,7 @@ import {
   getAvatarFallbackText,
   transformStatusEnum,
 } from "@/lib/helper";
-import { TaskType } from "@/types/api.type";
+import { type TaskType } from "@/types/api.type";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { Loader } from "lucide-react";
@@ -75,7 +74,17 @@ const RecentTasks = () => {
               {/* Task Status */}
               <div className="text-sm font-medium ">
                 <Badge
-                  variant={TaskStatusEnum[task.status]}
+                  variant={
+                    task.status === "DONE"
+                      ? "default"
+                      : task.status === "IN_PROGRESS"
+                      ? "secondary"
+                      : task.status === "IN_REVIEW"
+                      ? "outline"
+                      : task.status === "BACKLOG"
+                      ? "destructive"
+                      : "default"
+                  }
                   className="flex w-auto p-1 px-2 gap-1 font-medium shadow-sm uppercase border-0"
                 >
                   <span>{transformStatusEnum(task.status)}</span>
@@ -85,7 +94,13 @@ const RecentTasks = () => {
               {/* Task Priority */}
               <div className="text-sm ml-2">
                 <Badge
-                  variant={TaskPriorityEnum[task.priority]}
+                  variant={
+                    task.priority === "HIGH"
+                      ? "destructive"
+                      : task.priority === "MEDIUM"
+                      ? "secondary"
+                      : "default"
+                  }
                   className="flex w-auto p-1 px-2 gap-1 font-medium shadow-sm uppercase border-0"
                 >
                   <span>{transformStatusEnum(task.priority)}</span>

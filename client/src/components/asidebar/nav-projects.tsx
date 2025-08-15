@@ -35,7 +35,7 @@ import useGetProjectsInWorkspaceQuery from "@/hooks/api/use-get-projects";
 import { type PaginationType } from "@/types/api.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteProjectMutationFn } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 export function NavProjects() {
   const navigate = useNavigate();
@@ -84,20 +84,16 @@ export function NavProjects() {
           queryClient.invalidateQueries({
             queryKey: ["allprojects", workspaceId],
           });
-          toast({
-            title: "Success",
+          toast("Success" ,{
             description: data.message,
-            variant: "success",
           });
 
           navigate(`/workspace/${workspaceId}`);
           setTimeout(() => onCloseDialog(), 100);
         },
         onError: (error) => {
-          toast({
-            title: "Error",
+          toast("Error", {
             description: error.message,
-            variant: "destructive",
           });
         },
       }

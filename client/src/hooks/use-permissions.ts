@@ -1,5 +1,5 @@
-import { PermissionType } from "@/constant";
-import { UserType, WorkspaceWithMembersType } from "@/types/api.type";
+import { type PermissionType } from "@/constant";
+import { type UserType, type WorkspaceWithMembersType } from "@/types/api.type";
 import { useEffect, useMemo, useState } from "react";
 
 const usePermissions = (

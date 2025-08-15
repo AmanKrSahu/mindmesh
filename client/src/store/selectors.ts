@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { StoreApi, UseBoundStore } from "zustand";
+import { type StoreApi, type UseBoundStore } from "zustand";
 
 type WithSelectors<S> = S extends { getState: () => infer T }
   ? S & { use: { [K in keyof T]: () => T[K] } }

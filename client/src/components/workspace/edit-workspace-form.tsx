@@ -17,9 +17,9 @@ import { useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { editWorkspaceMutationFn } from "@/lib/api";
 import useWorkspaceId from "@/hooks/use-workspace-id";
-import { toast } from "@/hooks/use-toast";
 import { Loader } from "lucide-react";
 import { Permissions } from "@/constant";
+import { toast } from "sonner";
 
 export default function EditWorkspaceForm() {
   const { workspace, hasPermission } = useAuthContext();
@@ -70,10 +70,8 @@ export default function EditWorkspaceForm() {
         });
       },
       onError: (error) => {
-        toast({
-          title: "Error",
+        toast("Error", {
           description: error.message,
-          variant: "destructive",
         });
       },
     });

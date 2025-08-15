@@ -2,11 +2,11 @@
 import { createContext, useContext, useEffect } from "react";
 import useWorkspaceId from "@/hooks/use-workspace-id";
 import useAuth from "@/hooks/api/use-auth";
-import { UserType, WorkspaceType } from "@/types/api.type";
+import { type UserType, type WorkspaceType } from "@/types/api.type";
 import useGetWorkspaceQuery from "@/hooks/api/use-get-workspace";
 import { useNavigate } from "react-router-dom";
 import usePermissions from "@/hooks/use-permissions";
-import { PermissionType } from "@/constant";
+import { type PermissionType } from "@/constant";
 
 // Define the context shape
 type AuthContextType = {
